@@ -1,0 +1,43 @@
+pipeline {
+    agent { label 'windows-agent' }
+    environment {
+        registry = "my-registry"
+        tag = "latest"
+        newContainerName = "b2b-backend-container-${BUILD_NUMBER}"
+        previousBuildNumber = "${BUILD_NUMBER.toInteger() - 1}"
+        oldContainerName = "b2b-backend-container-${previousBuildNumber}"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                bat 'git checkout prod'
+		        bat 'git pull'
+            }
+        }
+        stage('Build') {
+            steps {
+                bat 'mvn clean package '
+            }
+        }
+        stage('Stop Container') {
+            steps {
+                script {
+                    try {
+                        bat "docker stop ${oldContainerName}"
+                        bat "docker rm ${oldContainerName}"
+                        bat 'docker rmi b2b-backend-image'
+                    } catch (Exception e) {
+                        // Ignore errors if the container is not running or already removed
+                    }
+                }
+            }
+        }
+        stage('Deploy in Docker') {
+            steps {
+                 bat 'docker build -t b2b-backend-image -f DockerfileProd .'
+                 bat "docker run -d -p 9091:9091 --name ${newContainerName} b2b-backend-image"
+            }
+        }
+    }
+}
+

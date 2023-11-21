@@ -1,0 +1,21 @@
+type BusinessUnit{
+    id:buID
+    buName:String
+    productLineName:String
+
+}
+
+type buID{
+    buId: ID!
+    productLineId:ID!
+}
+
+type BusinessUnitsDto{
+    businessUnitId:ID!
+    businessUnitName:String
+}
+
+type ProductLineDto{
+    productLineId:ID!
+    productLineName:String
+}

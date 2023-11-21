@@ -1,0 +1,14 @@
+type Query{
+    getMasterData(categoryName:String):[Master]
+    getManagerList(ll6Manager:String):Manager
+    getLL6List:[Manager]
+    getProductList(buName:String):[ProductLineDto]
+    getBusinessUnitList:[BusinessUnitsDto]
+    getAllMasterData:[Master]
+    getMasterCategories:[String]
+    getLL5List:[Manager]
+}
+
+
+
+

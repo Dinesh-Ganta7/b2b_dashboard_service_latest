@@ -1,0 +1,17 @@
+type Mutation{
+    # Add and Update queries for Master
+    addMasterData(masterInput: MasterInput):Master
+    updateMaster(masterUpdateInput : MasterUpdateInput) : Master
+
+    #Add and Update queries for Manager
+    addManager(managerDto: ManagerDto):Manager
+    updateManager(managerDto : ManagerDto): Manager
+
+    #Add and Update queries for BusinessUnit
+    addBusinessUnit(businessUnitDto : BusinessUnitDto):BusinessUnit
+    updateBusinessUnit(updateBusinessUnitDto: UpdateBusinessUnitDto): BusinessUnit
+
+    #Add and Update queries for ProductLine
+    addProductLine(addProductLineDto : AddProductLineDto) : BusinessUnit
+    updateProductLine(updateProductLineDto : UpdateProductLineDto) : BusinessUnit
+}

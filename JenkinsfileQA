@@ -1,0 +1,52 @@
+pipeline {
+    agent { label 'windows-agent' }
+    environment {
+        registry = "my-registry"
+        tag = "latest"
+        newContainerName = "b2b-backend-container-QA-${BUILD_NUMBER}"
+        previousBuildNumber = "${BUILD_NUMBER.toInteger() - 1}"
+        oldContainerName = "b2b-backend-container-QA-${previousBuildNumber}"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                bat 'git checkout qa_docker'
+		        bat 'git pull'
+            }
+        }
+        stage('Build') {
+            steps {
+                bat 'mvn clean package '
+            }
+        }
+        stage('Stop Container') {
+            steps {
+                script {
+                    try {
+                        bat "docker stop ${oldContainerName}"
+                        bat "docker rm ${oldContainerName}"
+                        bat 'docker rmi b2b-backend-image-qa'
+                    } catch (Exception e) {
+                        // Ignore errors if the container is not running or already removed
+                    }
+                }
+            }
+        }
+        stage('Deploy in Docker') {
+            steps {
+                 bat 'docker build -t b2b-backend-image-qa -f DockerfileQA .'
+                 bat "docker run -d -p 9092:9092 --name ${newContainerName} b2b-backend-image-qa"
+            }
+        }
+
+        // stage('SonarQube Analysis') {
+         //     steps {
+          //      withSonarQubeEnv('SonarQubeServer') {
+                  // Execute SonarQube analysis
+           //       bat 'mvn sonar:sonar'
+           //     }
+           //   }
+          //  }
+    }
+}
+

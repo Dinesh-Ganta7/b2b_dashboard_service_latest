@@ -1,0 +1,19 @@
+input BusinessUnitDto{
+    buName : String
+}
+
+input UpdateBusinessUnitDto{
+    existingBuName : String
+    updatedBuName : String
+}
+
+input AddProductLineDto{
+    buName : String
+    productLineName : String
+}
+
+input UpdateProductLineDto{
+    buName : String
+    existingProductLineName : String
+    updatedProductLineName : String
+}

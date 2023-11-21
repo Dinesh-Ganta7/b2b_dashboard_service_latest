@@ -1,0 +1,9 @@
+input MasterInput{
+    masterCategory:String
+    masterName: String
+}
+
+input MasterUpdateInput{
+    existingMasterName:String
+    updatedMasterName:String
+}
